@@ -1,13 +1,7 @@
--- Database: `food_ordering`
---
+
 CREATE DATABASE IF NOT EXISTS `food_ordering` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE `food_ordering`;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `addresses`
---
 
 CREATE TABLE `addresses` (
   `address_id` int(11) NOT NULL,
@@ -20,11 +14,7 @@ CREATE TABLE `addresses` (
   `is_default` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `cart_items`
---
 
 CREATE TABLE `cart_items` (
   `customer_id` int(11) NOT NULL,
@@ -33,11 +23,6 @@ CREATE TABLE `cart_items` (
   `added_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `categories`
---
 
 CREATE TABLE `categories` (
   `category_id` int(11) NOT NULL,
@@ -45,11 +30,7 @@ CREATE TABLE `categories` (
   `name` varchar(60) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `coupons`
---
 
 CREATE TABLE `coupons` (
   `coupon_id` int(11) NOT NULL,
@@ -67,11 +48,7 @@ CREATE TABLE `coupons` (
   `is_active` tinyint(1) NOT NULL DEFAULT 1
 ) ;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `customers`
---
 
 CREATE TABLE `customers` (
   `customer_id` int(11) NOT NULL,
@@ -84,11 +61,7 @@ CREATE TABLE `customers` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `delivery_partners`
---
 
 CREATE TABLE `delivery_partners` (
   `partner_id` int(11) NOT NULL,
@@ -98,11 +71,6 @@ CREATE TABLE `delivery_partners` (
   `is_available` tinyint(1) NOT NULL DEFAULT 1
 ) ;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `dining_tables`
---
 
 CREATE TABLE `dining_tables` (
   `table_id` int(11) NOT NULL,
@@ -112,11 +80,7 @@ CREATE TABLE `dining_tables` (
   `is_active` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `ingredients`
---
 
 CREATE TABLE `ingredients` (
   `ingredient_id` int(11) NOT NULL,
@@ -128,11 +92,6 @@ CREATE TABLE `ingredients` (
   `cost_per_unit` decimal(8,4) NOT NULL DEFAULT 0.0000
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `menu_items`
---
 
 CREATE TABLE `menu_items` (
   `item_id` int(11) NOT NULL,
@@ -144,11 +103,6 @@ CREATE TABLE `menu_items` (
   `is_available` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `menu_item_ingredients`
---
 
 CREATE TABLE `menu_item_ingredients` (
   `item_id` int(11) NOT NULL,
@@ -156,11 +110,7 @@ CREATE TABLE `menu_item_ingredients` (
   `qty_required` decimal(10,3) NOT NULL CHECK (`qty_required` > 0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `orders`
---
 
 CREATE TABLE `orders` (
   `order_id` int(11) NOT NULL,
@@ -181,9 +131,7 @@ CREATE TABLE `orders` (
   `delivered_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Triggers `orders`
---
+
 DELIMITER $$
 CREATE TRIGGER `trg_coupon_used` AFTER INSERT ON `orders` FOR EACH ROW BEGIN
     IF NEW.coupon_id IS NOT NULL THEN
@@ -209,11 +157,7 @@ END
 $$
 DELIMITER ;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `order_items`
---
 
 CREATE TABLE `order_items` (
   `order_item_id` int(11) NOT NULL,
@@ -223,9 +167,7 @@ CREATE TABLE `order_items` (
   `unit_price` decimal(8,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Triggers `order_items`
---
+
 DELIMITER $$
 CREATE TRIGGER `trg_deduct_stock` AFTER INSERT ON `order_items` FOR EACH ROW BEGIN
     INSERT INTO stock_movements (ingredient_id, change_qty, reason, order_id)
@@ -241,11 +183,7 @@ END
 $$
 DELIMITER ;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `order_status_history`
---
+-
 
 CREATE TABLE `order_status_history` (
   `history_id` int(11) NOT NULL,
@@ -255,11 +193,7 @@ CREATE TABLE `order_status_history` (
   `changed_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `payments`
---
 
 CREATE TABLE `payments` (
   `payment_id` int(11) NOT NULL,
@@ -273,9 +207,7 @@ CREATE TABLE `payments` (
 
 -- --------------------------------------------------------
 
---
--- Table structure for table `restaurants`
---
+
 
 CREATE TABLE `restaurants` (
   `restaurant_id` int(11) NOT NULL,
@@ -295,11 +227,7 @@ CREATE TABLE `restaurants` (
   `is_active` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `reviews`
---
 
 CREATE TABLE `reviews` (
   `review_id` int(11) NOT NULL,
@@ -311,9 +239,7 @@ CREATE TABLE `reviews` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Triggers `reviews`
---
+
 DELIMITER $$
 CREATE TRIGGER `trg_review_rating` AFTER INSERT ON `reviews` FOR EACH ROW BEGIN
     UPDATE restaurants
@@ -343,11 +269,6 @@ END
 $$
 DELIMITER ;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `stock_movements`
---
 
 CREATE TABLE `stock_movements` (
   `movement_id` int(11) NOT NULL,
@@ -358,11 +279,7 @@ CREATE TABLE `stock_movements` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `table_bookings`
---
 
 CREATE TABLE `table_bookings` (
   `booking_id` int(11) NOT NULL,
@@ -377,9 +294,7 @@ CREATE TABLE `table_bookings` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Triggers `table_bookings`
---
+
 DELIMITER $$
 CREATE TRIGGER `trg_booking_validate` BEFORE INSERT ON `table_bookings` FOR EACH ROW BEGIN
     DECLARE v_cap INT;
@@ -402,12 +317,7 @@ END
 $$
 DELIMITER ;
 
--- --------------------------------------------------------
 
---
--- Stand-in structure for view `v_customer_spend`
--- (See below for the actual view)
---
 CREATE TABLE `v_customer_spend` (
 `customer_id` int(11)
 ,`full_name` varchar(100)
@@ -416,36 +326,21 @@ CREATE TABLE `v_customer_spend` (
 ,`total_spent` decimal(32,2)
 );
 
--- --------------------------------------------------------
 
---
--- Stand-in structure for view `v_daily_sales`
--- (See below for the actual view)
---
 CREATE TABLE `v_daily_sales` (
 `sale_date` date
 ,`orders` bigint(21)
 ,`revenue` decimal(32,2)
 );
 
--- --------------------------------------------------------
 
---
--- Stand-in structure for view `v_item_availability`
--- (See below for the actual view)
---
 CREATE TABLE `v_item_availability` (
 `restaurant` varchar(120)
 ,`item` varchar(120)
 ,`portions_possible` bigint(14)
 );
 
--- --------------------------------------------------------
 
---
--- Stand-in structure for view `v_low_stock`
--- (See below for the actual view)
---
 CREATE TABLE `v_low_stock` (
 `restaurant` varchar(120)
 ,`ingredient` varchar(80)
@@ -454,12 +349,7 @@ CREATE TABLE `v_low_stock` (
 ,`unit` enum('g','kg','ml','l','pcs')
 );
 
--- --------------------------------------------------------
 
---
--- Stand-in structure for view `v_menu`
--- (See below for the actual view)
---
 CREATE TABLE `v_menu` (
 `restaurant` varchar(120)
 ,`category` varchar(60)
@@ -468,12 +358,7 @@ CREATE TABLE `v_menu` (
 ,`type` varchar(7)
 );
 
--- --------------------------------------------------------
 
---
--- Stand-in structure for view `v_open_restaurants`
--- (See below for the actual view)
---
 CREATE TABLE `v_open_restaurants` (
 `restaurant_id` int(11)
 ,`name` varchar(120)
@@ -483,12 +368,7 @@ CREATE TABLE `v_open_restaurants` (
 ,`avg_rating` decimal(3,2)
 );
 
--- --------------------------------------------------------
 
---
--- Stand-in structure for view `v_order_summary`
--- (See below for the actual view)
---
 CREATE TABLE `v_order_summary` (
 `order_id` int(11)
 ,`customer` varchar(100)
@@ -505,12 +385,7 @@ CREATE TABLE `v_order_summary` (
 ,`placed_at` timestamp
 );
 
--- --------------------------------------------------------
 
---
--- Stand-in structure for view `v_restaurant_stats`
--- (See below for the actual view)
---
 CREATE TABLE `v_restaurant_stats` (
 `restaurant_id` int(11)
 ,`name` varchar(120)
@@ -520,12 +395,7 @@ CREATE TABLE `v_restaurant_stats` (
 ,`revenue` decimal(32,2)
 );
 
--- --------------------------------------------------------
 
---
--- Stand-in structure for view `v_top_items`
--- (See below for the actual view)
---
 CREATE TABLE `v_top_items` (
 `item` varchar(120)
 ,`restaurant` varchar(120)
@@ -533,12 +403,7 @@ CREATE TABLE `v_top_items` (
 ,`sales` decimal(40,2)
 );
 
--- --------------------------------------------------------
 
---
--- Stand-in structure for view `v_upcoming_bookings`
--- (See below for the actual view)
---
 CREATE TABLE `v_upcoming_bookings` (
 `booking_id` int(11)
 ,`customer` varchar(100)
@@ -551,175 +416,110 @@ CREATE TABLE `v_upcoming_bookings` (
 ,`status` enum('BOOKED','SEATED','COMPLETED','CANCELLED','NO_SHOW')
 );
 
--- --------------------------------------------------------
 
---
--- Structure for view `v_customer_spend`
---
 DROP TABLE IF EXISTS `v_customer_spend`;
 
 CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `v_customer_spend`  AS SELECT `cu`.`customer_id` AS `customer_id`, `cu`.`full_name` AS `full_name`, `cu`.`loyalty_points` AS `loyalty_points`, count(`o`.`order_id`) AS `delivered_orders`, ifnull(sum(`o`.`total_amount`),0) AS `total_spent` FROM (`customers` `cu` left join `orders` `o` on(`o`.`customer_id` = `cu`.`customer_id` and `o`.`status` = 'DELIVERED')) GROUP BY `cu`.`customer_id`, `cu`.`full_name`, `cu`.`loyalty_points` ;
 
--- --------------------------------------------------------
 
---
--- Structure for view `v_daily_sales`
---
 DROP TABLE IF EXISTS `v_daily_sales`;
 
 CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `v_daily_sales`  AS SELECT cast(`orders`.`placed_at` as date) AS `sale_date`, count(0) AS `orders`, sum(`orders`.`total_amount`) AS `revenue` FROM `orders` WHERE `orders`.`status` = 'DELIVERED' GROUP BY cast(`orders`.`placed_at` as date) ;
 
 -- --------------------------------------------------------
 
---
--- Structure for view `v_item_availability`
---
+
 DROP TABLE IF EXISTS `v_item_availability`;
 
 CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `v_item_availability`  AS SELECT `r`.`name` AS `restaurant`, `m`.`name` AS `item`, min(floor(`i`.`stock_qty` / `mi`.`qty_required`)) AS `portions_possible` FROM ((((`menu_items` `m` join `categories` `c` on(`c`.`category_id` = `m`.`category_id`)) join `restaurants` `r` on(`r`.`restaurant_id` = `c`.`restaurant_id`)) join `menu_item_ingredients` `mi` on(`mi`.`item_id` = `m`.`item_id`)) join `ingredients` `i` on(`i`.`ingredient_id` = `mi`.`ingredient_id`)) GROUP BY `r`.`name`, `m`.`item_id`, `m`.`name` ;
 
--- --------------------------------------------------------
 
---
--- Structure for view `v_low_stock`
---
 DROP TABLE IF EXISTS `v_low_stock`;
 
 CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `v_low_stock`  AS SELECT `r`.`name` AS `restaurant`, `i`.`name` AS `ingredient`, `i`.`stock_qty` AS `stock_qty`, `i`.`reorder_level` AS `reorder_level`, `i`.`unit` AS `unit` FROM (`ingredients` `i` join `restaurants` `r` on(`r`.`restaurant_id` = `i`.`restaurant_id`)) WHERE `i`.`stock_qty` <= `i`.`reorder_level` ;
 
--- --------------------------------------------------------
 
---
--- Structure for view `v_menu`
---
 DROP TABLE IF EXISTS `v_menu`;
 
 CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `v_menu`  AS SELECT `r`.`name` AS `restaurant`, `c`.`name` AS `category`, `m`.`name` AS `item`, `m`.`price` AS `price`, if(`m`.`is_veg`,'Veg','Non-Veg') AS `type` FROM ((`menu_items` `m` join `categories` `c` on(`c`.`category_id` = `m`.`category_id`)) join `restaurants` `r` on(`r`.`restaurant_id` = `c`.`restaurant_id`)) WHERE `m`.`is_available` = 1 ;
 
--- --------------------------------------------------------
 
---
--- Structure for view `v_open_restaurants`
---
 DROP TABLE IF EXISTS `v_open_restaurants`;
 
 CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `v_open_restaurants`  AS SELECT `restaurants`.`restaurant_id` AS `restaurant_id`, `restaurants`.`name` AS `name`, `restaurants`.`cuisine_type` AS `cuisine_type`, `restaurants`.`opening_time` AS `opening_time`, `restaurants`.`closing_time` AS `closing_time`, `restaurants`.`avg_rating` AS `avg_rating` FROM `restaurants` WHERE `restaurants`.`is_active` = 1 AND curtime() between `restaurants`.`opening_time` and `restaurants`.`closing_time` ;
 
--- --------------------------------------------------------
 
---
--- Structure for view `v_order_summary`
---
 DROP TABLE IF EXISTS `v_order_summary`;
 
 CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `v_order_summary`  AS SELECT `o`.`order_id` AS `order_id`, `cu`.`full_name` AS `customer`, `r`.`name` AS `restaurant`, `o`.`order_type` AS `order_type`, `o`.`status` AS `status`, `o`.`subtotal` AS `subtotal`, `o`.`discount_amount` AS `discount_amount`, `o`.`tax` AS `tax`, `o`.`delivery_fee` AS `delivery_fee`, `o`.`total_amount` AS `total_amount`, `p`.`method` AS `method`, `p`.`status` AS `payment_status`, `o`.`placed_at` AS `placed_at` FROM (((`orders` `o` join `customers` `cu` on(`cu`.`customer_id` = `o`.`customer_id`)) join `restaurants` `r` on(`r`.`restaurant_id` = `o`.`restaurant_id`)) left join `payments` `p` on(`p`.`order_id` = `o`.`order_id`)) ;
 
--- --------------------------------------------------------
 
---
--- Structure for view `v_restaurant_stats`
---
 DROP TABLE IF EXISTS `v_restaurant_stats`;
 
 CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `v_restaurant_stats`  AS SELECT `r`.`restaurant_id` AS `restaurant_id`, `r`.`name` AS `name`, `r`.`avg_rating` AS `avg_rating`, `r`.`rating_count` AS `rating_count`, count(`o`.`order_id`) AS `total_orders`, ifnull(sum(case when `o`.`status` = 'DELIVERED' then `o`.`total_amount` end),0) AS `revenue` FROM (`restaurants` `r` left join `orders` `o` on(`o`.`restaurant_id` = `r`.`restaurant_id`)) GROUP BY `r`.`restaurant_id`, `r`.`name`, `r`.`avg_rating`, `r`.`rating_count` ;
 
--- --------------------------------------------------------
 
---
--- Structure for view `v_top_items`
---
 DROP TABLE IF EXISTS `v_top_items`;
 
 CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `v_top_items`  AS SELECT `m`.`name` AS `item`, `r`.`name` AS `restaurant`, sum(`oi`.`quantity`) AS `units_sold`, sum(`oi`.`quantity` * `oi`.`unit_price`) AS `sales` FROM ((((`order_items` `oi` join `orders` `o` on(`o`.`order_id` = `oi`.`order_id` and `o`.`status` <> 'CANCELLED')) join `menu_items` `m` on(`m`.`item_id` = `oi`.`item_id`)) join `categories` `c` on(`c`.`category_id` = `m`.`category_id`)) join `restaurants` `r` on(`r`.`restaurant_id` = `c`.`restaurant_id`)) GROUP BY `m`.`item_id`, `m`.`name`, `r`.`name` ;
 
--- --------------------------------------------------------
 
---
--- Structure for view `v_upcoming_bookings`
---
 DROP TABLE IF EXISTS `v_upcoming_bookings`;
 
 CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `v_upcoming_bookings`  AS SELECT `b`.`booking_id` AS `booking_id`, `cu`.`full_name` AS `customer`, `r`.`name` AS `restaurant`, `t`.`table_number` AS `table_number`, `b`.`booking_date` AS `booking_date`, `b`.`start_time` AS `start_time`, `b`.`end_time` AS `end_time`, `b`.`guests` AS `guests`, `b`.`status` AS `status` FROM (((`table_bookings` `b` join `customers` `cu` on(`cu`.`customer_id` = `b`.`customer_id`)) join `dining_tables` `t` on(`t`.`table_id` = `b`.`table_id`)) join `restaurants` `r` on(`r`.`restaurant_id` = `t`.`restaurant_id`)) WHERE `b`.`booking_date` >= curdate() AND `b`.`status` in ('BOOKED','SEATED') ;
 
---
--- Indexes for dumped tables
---
 
---
--- Indexes for table `addresses`
---
 ALTER TABLE `addresses`
   ADD PRIMARY KEY (`address_id`),
   ADD KEY `customer_id` (`customer_id`);
 
---
--- Indexes for table `cart_items`
---
+
 ALTER TABLE `cart_items`
   ADD PRIMARY KEY (`customer_id`,`item_id`),
   ADD KEY `item_id` (`item_id`);
 
---
--- Indexes for table `categories`
---
+
 ALTER TABLE `categories`
   ADD PRIMARY KEY (`category_id`),
   ADD UNIQUE KEY `restaurant_id` (`restaurant_id`,`name`);
 
---
--- Indexes for table `coupons`
---
+
 ALTER TABLE `coupons`
   ADD PRIMARY KEY (`coupon_id`),
   ADD UNIQUE KEY `code` (`code`),
   ADD KEY `restaurant_id` (`restaurant_id`);
-
---
--- Indexes for table `customers`
---
+-
 ALTER TABLE `customers`
   ADD PRIMARY KEY (`customer_id`),
   ADD UNIQUE KEY `email` (`email`),
   ADD UNIQUE KEY `phone` (`phone`);
 
---
--- Indexes for table `delivery_partners`
---
+
 ALTER TABLE `delivery_partners`
   ADD PRIMARY KEY (`partner_id`),
   ADD UNIQUE KEY `phone` (`phone`);
 
---
--- Indexes for table `dining_tables`
---
+
 ALTER TABLE `dining_tables`
   ADD PRIMARY KEY (`table_id`),
   ADD UNIQUE KEY `restaurant_id` (`restaurant_id`,`table_number`);
 
---
--- Indexes for table `ingredients`
---
+
 ALTER TABLE `ingredients`
   ADD PRIMARY KEY (`ingredient_id`),
   ADD UNIQUE KEY `restaurant_id` (`restaurant_id`,`name`);
 
---
--- Indexes for table `menu_items`
---
+
 ALTER TABLE `menu_items`
   ADD PRIMARY KEY (`item_id`),
   ADD KEY `idx_menu_category` (`category_id`);
 
---
--- Indexes for table `menu_item_ingredients`
---
+
 ALTER TABLE `menu_item_ingredients`
   ADD PRIMARY KEY (`item_id`,`ingredient_id`),
   ADD KEY `ingredient_id` (`ingredient_id`);
 
---
--- Indexes for table `orders`
---
+
 ALTER TABLE `orders`
   ADD PRIMARY KEY (`order_id`),
   ADD KEY `address_id` (`address_id`),
@@ -730,84 +530,58 @@ ALTER TABLE `orders`
   ADD KEY `idx_orders_restaurant` (`restaurant_id`,`status`),
   ADD KEY `idx_orders_placed_at` (`placed_at`);
 
---
--- Indexes for table `order_items`
---
+
 ALTER TABLE `order_items`
   ADD PRIMARY KEY (`order_item_id`),
   ADD KEY `order_id` (`order_id`),
   ADD KEY `item_id` (`item_id`);
 
---
--- Indexes for table `order_status_history`
---
+
 ALTER TABLE `order_status_history`
   ADD PRIMARY KEY (`history_id`),
   ADD KEY `idx_history_order` (`order_id`);
 
---
--- Indexes for table `payments`
---
+
 ALTER TABLE `payments`
   ADD PRIMARY KEY (`payment_id`),
   ADD UNIQUE KEY `order_id` (`order_id`);
 
---
--- Indexes for table `restaurants`
---
+
 ALTER TABLE `restaurants`
   ADD PRIMARY KEY (`restaurant_id`);
 
---
--- Indexes for table `reviews`
---
+
 ALTER TABLE `reviews`
   ADD PRIMARY KEY (`review_id`),
   ADD UNIQUE KEY `order_id` (`order_id`),
   ADD KEY `customer_id` (`customer_id`),
   ADD KEY `restaurant_id` (`restaurant_id`);
 
---
--- Indexes for table `stock_movements`
---
+
 ALTER TABLE `stock_movements`
   ADD PRIMARY KEY (`movement_id`),
   ADD KEY `idx_stock_ingredient` (`ingredient_id`),
   ADD KEY `idx_stock_order` (`order_id`);
 
---
--- Indexes for table `table_bookings`
---
+
 ALTER TABLE `table_bookings`
   ADD PRIMARY KEY (`booking_id`),
   ADD KEY `customer_id` (`customer_id`),
   ADD KEY `idx_bookings_slot` (`table_id`,`booking_date`,`status`);
 
---
--- AUTO_INCREMENT for dumped tables
---
 
---
--- AUTO_INCREMENT for table `addresses`
---
 ALTER TABLE `addresses`
   MODIFY `address_id` int(11) NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `categories`
---
+
 ALTER TABLE `categories`
   MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `coupons`
---
+
 ALTER TABLE `coupons`
   MODIFY `coupon_id` int(11) NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `customers`
---
+
 ALTER TABLE `customers`
   MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT;
 
@@ -883,12 +657,7 @@ ALTER TABLE `stock_movements`
 ALTER TABLE `table_bookings`
   MODIFY `booking_id` int(11) NOT NULL AUTO_INCREMENT;
 
---
--- Constraints for dumped tables
---
 
---
--- Constraints for table `addresses`
 --
 ALTER TABLE `addresses`
   ADD CONSTRAINT `addresses_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`customer_id`) ON DELETE CASCADE;
@@ -918,28 +687,20 @@ ALTER TABLE `coupons`
 ALTER TABLE `dining_tables`
   ADD CONSTRAINT `dining_tables_ibfk_1` FOREIGN KEY (`restaurant_id`) REFERENCES `restaurants` (`restaurant_id`) ON DELETE CASCADE;
 
---
--- Constraints for table `ingredients`
---
+
 ALTER TABLE `ingredients`
   ADD CONSTRAINT `ingredients_ibfk_1` FOREIGN KEY (`restaurant_id`) REFERENCES `restaurants` (`restaurant_id`) ON DELETE CASCADE;
 
---
--- Constraints for table `menu_items`
---
+
 ALTER TABLE `menu_items`
   ADD CONSTRAINT `menu_items_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`category_id`) ON DELETE CASCADE;
 
---
--- Constraints for table `menu_item_ingredients`
---
+
 ALTER TABLE `menu_item_ingredients`
   ADD CONSTRAINT `menu_item_ingredients_ibfk_1` FOREIGN KEY (`item_id`) REFERENCES `menu_items` (`item_id`) ON DELETE CASCADE,
   ADD CONSTRAINT `menu_item_ingredients_ibfk_2` FOREIGN KEY (`ingredient_id`) REFERENCES `ingredients` (`ingredient_id`) ON DELETE CASCADE;
 
---
--- Constraints for table `orders`
---
+
 ALTER TABLE `orders`
   ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`customer_id`),
   ADD CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`restaurant_id`) REFERENCES `restaurants` (`restaurant_id`),
@@ -948,43 +709,31 @@ ALTER TABLE `orders`
   ADD CONSTRAINT `orders_ibfk_5` FOREIGN KEY (`booking_id`) REFERENCES `table_bookings` (`booking_id`),
   ADD CONSTRAINT `orders_ibfk_6` FOREIGN KEY (`coupon_id`) REFERENCES `coupons` (`coupon_id`);
 
---
--- Constraints for table `order_items`
---
+
 ALTER TABLE `order_items`
   ADD CONSTRAINT `order_items_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE,
   ADD CONSTRAINT `order_items_ibfk_2` FOREIGN KEY (`item_id`) REFERENCES `menu_items` (`item_id`);
 
---
--- Constraints for table `order_status_history`
---
+
 ALTER TABLE `order_status_history`
   ADD CONSTRAINT `order_status_history_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE;
 
---
--- Constraints for table `payments`
---
+
 ALTER TABLE `payments`
   ADD CONSTRAINT `payments_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE;
 
---
--- Constraints for table `reviews`
---
+
 ALTER TABLE `reviews`
   ADD CONSTRAINT `reviews_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`),
   ADD CONSTRAINT `reviews_ibfk_2` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`customer_id`),
   ADD CONSTRAINT `reviews_ibfk_3` FOREIGN KEY (`restaurant_id`) REFERENCES `restaurants` (`restaurant_id`);
 
---
--- Constraints for table `stock_movements`
---
+
 ALTER TABLE `stock_movements`
   ADD CONSTRAINT `stock_movements_ibfk_1` FOREIGN KEY (`ingredient_id`) REFERENCES `ingredients` (`ingredient_id`) ON DELETE CASCADE;
 
---
--- Constraints for table `table_bookings`
---
+
 ALTER TABLE `table_bookings`
   ADD CONSTRAINT `table_bookings_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`customer_id`),
   ADD CONSTRAINT `table_bookings_ibfk_2` FOREIGN KEY (`table_id`) REFERENCES `dining_tables` (`table_id`);
---
+
