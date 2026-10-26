@@ -16,3 +16,5 @@ desktop.ini
 *.sqlite
 *.sqlite3
 *.db
+
+/127_0_0_1.sql

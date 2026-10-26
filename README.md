@@ -42,6 +42,8 @@ Restaurant Food Ordering is a server-rendered application for browsing restauran
 .
 ├── admin/
 │   └── index.php     # Admin dashboard
+├── database/
+│   └── food_ordering.sql # Food-ordering database structure
 ├── bookings.php      # Table booking and booking history
 ├── cart.php          # Cart and checkout
 ├── common.php        # Shared layout, session, and helper functions
@@ -67,13 +69,15 @@ Restaurant Food Ordering is a server-rendered application for browsing restauran
 1. Clone or copy this repository into your web server's document root (for XAMPP, usually `htdocs`).
 2. Start Apache and MySQL.
 3. Create a MySQL database named `food_ordering`.
-4. Import a compatible database schema and seed data.
+4. Import [`database/food_ordering.sql`](./database/food_ordering.sql) using phpMyAdmin's **Import** tab.
 5. Review `db.php` and configure the connection for your local MySQL account.
 6. Open `http://localhost/restaurant/` in your browser. Change `restaurant` in the URL if you chose another folder name.
 
 ### Database requirement
 
-There is currently no SQL schema or seed-data file in this repository. The application expects database tables, views, and stored procedures for restaurants, menus, customers, carts, orders, bookings, and reports. The site will not work until a compatible database has been created and populated.
+The SQL file contains only the `food_ordering` database structure (tables, triggers, and views). It excludes rows and other databases from the phpMyAdmin server export. No sample restaurant or menu data is included, so add appropriate data before using the app.
+
+> **Stored procedures:** The export does not include stored procedures. Several app actions call procedures such as `sp_add_to_cart`, `sp_place_order`, and `sp_book_table`; those actions need the matching procedures added to the database before they will work. The downloaded server-wide export is not included; it contained unrelated databases and phpMyAdmin tables.
 
 ## Development and security notes
 
