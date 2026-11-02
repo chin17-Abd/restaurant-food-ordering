@@ -18,6 +18,15 @@ Restaurant Food Ordering is a server-rendered application for browsing restauran
 
 > **Project status:** The source code and database schema are included. No seed data is provided, so add appropriate restaurant and menu data before using the app.
 
+## MySQL connection
+
+The app connects to the local `food_ordering` database with MySQLi. This is the default development setup for a local XAMPP installation; update the connection settings in [`db.php`](./db.php) if your MySQL username or password is different.
+
+```php
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+$conn = mysqli_connect("localhost", "root", "", "food_ordering");
+```
+
 ## Features
 
 | Area | Capabilities |
