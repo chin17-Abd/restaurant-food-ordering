@@ -16,7 +16,7 @@
 
 Restaurant Food Ordering is a server-rendered application for browsing restaurant menus, placing orders, and reserving tables. Customers can manage their orders and bookings, while administrators can manage menu availability and order progress.
 
-> **Project status:** The source code is available, but the database schema and seed data are not included yet. The app needs a compatible SQL setup before it can run.
+> **Project status:** The source code and database schema are included. No seed data is provided, so add appropriate restaurant and menu data before using the app.
 
 ## Features
 
@@ -76,6 +76,137 @@ Restaurant Food Ordering is a server-rendered application for browsing restauran
 ### Database requirement
 
 The SQL file contains only the `food_ordering` database structure (tables, triggers, and views). It excludes rows and other databases from the phpMyAdmin server export. No sample restaurant or menu data is included, so add appropriate data before using the app.
+
+### Entity relationship diagram
+
+The project ER diagram is shown below. The full table and foreign-key relationships from [`database/food_ordering.sql`](./database/food_ordering.sql) are also documented in the Mermaid diagram that follows.
+
+![Restaurant food ordering ER diagram](./assets/ER_diagram.png)
+
+The Mermaid diagram below includes the schema's foreign-key relationships. `stock_movements.order_id` is not shown as a relationship because the SQL schema does not define a foreign key for it.
+
+```mermaid
+erDiagram
+    ADDRESSES {
+        int address_id PK
+        int customer_id FK
+    }
+    CART_ITEMS {
+        int customer_id PK, FK
+        int item_id PK, FK
+        int quantity
+    }
+    CATEGORIES {
+        int category_id PK
+        int restaurant_id FK
+        string name
+    }
+    COUPONS {
+        int coupon_id PK
+        int restaurant_id FK
+        string code
+    }
+    CUSTOMERS {
+        int customer_id PK
+        string full_name
+        string email
+    }
+    DELIVERY_PARTNERS {
+        int partner_id PK
+        string full_name
+    }
+    DINING_TABLES {
+        int table_id PK
+        int restaurant_id FK
+        string table_number
+    }
+    INGREDIENTS {
+        int ingredient_id PK
+        int restaurant_id FK
+        string name
+    }
+    MENU_ITEMS {
+        int item_id PK
+        int category_id FK
+        string name
+    }
+    MENU_ITEM_INGREDIENTS {
+        int item_id PK, FK
+        int ingredient_id PK, FK
+        decimal qty_required
+    }
+    ORDERS {
+        int order_id PK
+        int customer_id FK
+        int restaurant_id FK
+        int address_id FK
+        int partner_id FK
+        int booking_id FK
+        int coupon_id FK
+    }
+    ORDER_ITEMS {
+        int order_item_id PK
+        int order_id FK
+        int item_id FK
+        int quantity
+    }
+    ORDER_STATUS_HISTORY {
+        int history_id PK
+        int order_id FK
+    }
+    PAYMENTS {
+        int payment_id PK
+        int order_id FK
+        string status
+    }
+    RESTAURANTS {
+        int restaurant_id PK
+        string name
+    }
+    REVIEWS {
+        int review_id PK
+        int order_id FK
+        int customer_id FK
+        int restaurant_id FK
+    }
+    STOCK_MOVEMENTS {
+        int movement_id PK
+        int ingredient_id FK
+        int order_id
+    }
+    TABLE_BOOKINGS {
+        int booking_id PK
+        int customer_id FK
+        int table_id FK
+    }
+
+    CUSTOMERS ||--o{ ADDRESSES : has
+    CUSTOMERS ||--o{ CART_ITEMS : owns
+    MENU_ITEMS ||--o{ CART_ITEMS : added_to
+    RESTAURANTS ||--o{ CATEGORIES : offers
+    RESTAURANTS ||--o{ COUPONS : provides
+    RESTAURANTS ||--o{ DINING_TABLES : has
+    RESTAURANTS ||--o{ INGREDIENTS : stocks
+    CATEGORIES ||--o{ MENU_ITEMS : contains
+    MENU_ITEMS ||--o{ MENU_ITEM_INGREDIENTS : uses
+    INGREDIENTS ||--o{ MENU_ITEM_INGREDIENTS : included_in
+    CUSTOMERS ||--o{ ORDERS : places
+    RESTAURANTS ||--o{ ORDERS : receives
+    ADDRESSES o|--o{ ORDERS : delivery_address
+    DELIVERY_PARTNERS o|--o{ ORDERS : delivers
+    TABLE_BOOKINGS o|--o{ ORDERS : linked_to
+    COUPONS o|--o{ ORDERS : applied_to
+    ORDERS ||--o{ ORDER_ITEMS : contains
+    MENU_ITEMS ||--o{ ORDER_ITEMS : ordered_as
+    ORDERS ||--o{ ORDER_STATUS_HISTORY : tracks
+    ORDERS ||--o| PAYMENTS : paid_by
+    ORDERS ||--o| REVIEWS : reviewed_in
+    CUSTOMERS ||--o{ REVIEWS : writes
+    RESTAURANTS ||--o{ REVIEWS : receives
+    INGREDIENTS ||--o{ STOCK_MOVEMENTS : records
+    CUSTOMERS ||--o{ TABLE_BOOKINGS : makes
+    DINING_TABLES ||--o{ TABLE_BOOKINGS : reserved_for
+```
 
 > **Stored procedures:** The export does not include stored procedures. Several app actions call procedures such as `sp_add_to_cart`, `sp_place_order`, and `sp_book_table`; those actions need the matching procedures added to the database before they will work. The downloaded server-wide export is not included; it contained unrelated databases and phpMyAdmin tables.
 
